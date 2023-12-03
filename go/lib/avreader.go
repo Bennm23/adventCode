@@ -3,6 +3,8 @@ package lib
 import (
 	"bufio"
 	"os"
+	"time"
+	"fmt"
 )
 const FILE_PATH = "/home/benn/CODE/adventCode/";
 
@@ -24,4 +26,12 @@ func ReadFile(name string) ([]string, error) {
 	}
 
 	return lines, scanner.Err()
+}
+
+type Solver func()
+
+func RunAndPrintDuration(solver Solver) {
+	start := time.Now().UnixMicro()
+	solver()
+	fmt.Println("Duration = ", (time.Now().UnixMicro() - start))
 }

@@ -6,12 +6,14 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"time"
 )
 
 func main() {
-	start := time.Now().UnixMicro()
 
+	lib.RunAndPrintDuration(solve)//1655-1773
+}
+
+func solve() {
 	lines, err  := lib.ReadFile("day1.txt")
 
 	if err != nil {
@@ -22,8 +24,6 @@ func main() {
 	fmt.Println("PART 1 = ", part1(lines, re))//55130
 	fmt.Println("PART 2 = ", part2(lines, re))//54985
 
-	fmt.Println("Duration = ", (time.Now().UnixMicro() - start))//1655-1773
-	
 }
 
 func part1(lines []string, re *regexp.Regexp) int {

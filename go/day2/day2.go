@@ -12,18 +12,18 @@ import (
 func main() {
 	fmt.Println("Day2")
 
-	lines, err := lib.ReadFile("day2.txt")
+	lib.RunAndPrintDuration(func() {//649-724
+		lines, err := lib.ReadFile("day2.txt")
 
-	if err != nil {
-		panic("Failed to parse day2.txt")
-	}
-	
-	p1, p2 := solve(lines)
+		if err != nil {
+			panic("Failed to parse day2.txt")
+		}
+		
+		p1, p2 := solve(lines)
 
-	fmt.Println("PART 1 = ", p1)//2879
-	fmt.Println("PART 2 = ", p2)
-
-
+		fmt.Println("PART 1 = ", p1)//2879
+		fmt.Println("PART 2 = ", p2)//65122
+	})
 }
 
 type ColorMap map[string]int
@@ -98,8 +98,6 @@ func getGamePower(game string, intFind *regexp.Regexp, scoreSplit *regexp.Regexp
 		}
 
 	}
-	fmt.Println(maxScoreMap)
-
 	return maxScoreMap[GREEN] * maxScoreMap[BLUE] * maxScoreMap[RED]
 }
 
@@ -112,7 +110,6 @@ func solve(lines []string) (int, int) {
 
 	for round, line := range lines {
 		line = strings.Split(line, ":")[1]
-		fmt.Println(line)
 
 		if gamePasses(strings.Split(line, ";"), intFind) {
 			score += round + 1
@@ -120,7 +117,6 @@ func solve(lines []string) (int, int) {
 	
 		val := getGamePower(line, intFind, scoreSplit)
 		powerScore += val
-		fmt.Println(val)
 	}
 
 	return score, powerScore
