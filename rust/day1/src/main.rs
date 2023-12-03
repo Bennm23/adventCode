@@ -19,7 +19,7 @@ fn main() {
         Err(_) => panic!("oops")
     };
 
-    println!("TIme = {}", (end - start));
+    println!("TIme = {}", (end - start));//941-1200 uS
 
 }
 

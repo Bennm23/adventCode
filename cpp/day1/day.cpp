@@ -84,7 +84,7 @@ int main() {
 
     auto end = std::chrono::system_clock::now().time_since_epoch().count();
 
-    cout << "TIME ELAPSED = " << (timeSinceEpochMillisec() - start) << endl;
+    cout << "TIME ELAPSED = " << (timeSinceEpochMillisec() - start) << endl;//1154, 1566, 1900
 
     return 0;
 }
