@@ -165,7 +165,7 @@ int solveSeedList(vector<vector<Entry>> mappings, vector<long> seedList) {
     return min;
 }
 
-long getSeedMapping(MapList mappings, long startVal) {
+int getSeedMapping(MapList mappings, int startVal) {
     int seedVal = startVal;//The value that we are trying to find key for
     bool foundSeed;
     //Loop through mappings in reverse order
@@ -288,7 +288,7 @@ int main() {
     long minHumidity = 0;
 
     vector<int> locations;
-    long maxLocation = INT64_MIN;
+    int maxLocation = INT32_MIN;
     for (auto p : humidityLocation) {
 
         if (p.valMax > maxLocation) {
