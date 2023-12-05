@@ -1,7 +1,6 @@
 use std::{
-    string,
     fs,
-    env, fmt::format
+    time::SystemTime,
 };
 
 const TXT_PATH : &str = "/home/benn/CODE/adventCode/";
@@ -31,3 +30,20 @@ pub fn read_file_to_vec(day_file : &str) -> Vec<String> {
 //         assert_eq!(result, 4);
 //     }
 // }
+
+
+pub fn run_and_print_duration(solver : &dyn Fn()) {
+    let start = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
+        Ok(n) => n.as_micros(),
+        Err(_) => panic!("oops")
+    };
+    
+    solver();
+
+    let end = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
+        Ok(n) => n.as_micros(),
+        Err(_) => panic!("oops")
+    };
+
+    println!("TIme = {}", (end - start));
+}

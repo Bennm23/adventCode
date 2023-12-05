@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h>
 #include <unistd.h>
 #include <limits>
 #include <chrono>
@@ -165,17 +166,16 @@ int solveSeedList(vector<vector<Entry>> mappings, vector<long> seedList) {
     return min;
 }
 
-int getSeedMapping(MapList mappings, int startVal) {
-    int seedVal = startVal;//The value that we are trying to find key for
+long getSeedMapping(MapList mappings, long startVal) {
+    long seedVal = startVal;//The value that we are trying to find key for
     bool foundSeed;
     //Loop through mappings in reverse order
-    for (int mapping = mappings.size()-1; mapping > -1; mapping--){
+    for (long mapping = mappings.size()-1; mapping > -1; mapping--){
 
         // cout << "Looking at Mapping = " << mapping << " For Key = " << seedVal << endl;
         //For each mapping, try to find match
         for (auto match : mappings[mapping]) {
 
-            print(match);
             if (match.checkInValRange(seedVal)) {
                 //If match found, then we have found a mapped entry to this key
                 //Need to get the mapped key
@@ -190,13 +190,13 @@ int getSeedMapping(MapList mappings, int startVal) {
 
     return foundSeed ? seedVal : -1;
 }
-int search(MapList mappings, int maxLocation, int bound, int offset) {
+long search(MapList mappings, long maxLocation, long bound, long offset) {
     // int bestLocation;
     // int bestSeed;
 
-    for (int i = 0 + offset; i <= maxLocation; i+= bound)
+    for (long i = 0 + offset; i < maxLocation; i+= bound)
     {
-        int foundSeed = getSeedMapping(mappings, i);
+        long foundSeed = getSeedMapping(mappings, i);
 
         if (foundSeed != -1 )
         {
@@ -213,34 +213,30 @@ int search(MapList mappings, int maxLocation, int bound, int offset) {
 
 }
 
-int solveP2(MapList mappings, int maxLocation) {
+long solveP2(MapList mappings, long maxLocation) {
 
     //Max Location is the highest known mapping to a location
     //Thus any additional default mapping must be higher
 
     //We need to search 0-maxLocation - 1 in large bounds and slowly decrease as our possiilities decrease
-
-    //1) Search in bounds of ? from 0 to maxLocation
-    //      a) Iterate up through the maps and find a valid seed
-    //          if seed valid and < max, set max to search Location and store bestSeed
-
-    int bound = 1024;
-    int offset = 0;
+    long bound = max(1L, (long)floor(maxLocation / 10));
+    long offset = 0;
     while (bound != 1) {
-        int result = search(mappings, maxLocation, bound, offset);
+        long result = search(mappings, maxLocation, bound, offset);
 
         if (result == -1) {
             //No match was found, shift
             offset = (offset + 1) % bound;
             if (offset == 0) {
-                cout << "Wrapped all the way around on this bound, error" << endl;
-                exit(1);
+                cout << "Wrapped all the way around on this bound, done" << endl;
+                cout << "Current Bound = " << bound << endl;
+                return maxLocation;
             }
         } else {
             //match was found
             maxLocation = result;
             offset = 0;
-            bound = bound / 2;
+            bound = max(1L, (long)floor(maxLocation / 10));
         }
     }
     return maxLocation;
@@ -250,9 +246,9 @@ int solveP2(MapList mappings, int maxLocation) {
 
 int main() {
 
-    // auto start = timeSinceEpochMillisec();
+    auto start = avreader::timeSinceEpochMillisec();
 
-    ifstream inFile("/home/benn/CODE/adventCode/sample");
+    ifstream inFile("/home/benn/CODE/adventCode/day5.txt");
 
     vector<long> seedList = readSeedList(&inFile);
     long minSeed = INT64_MAX;
@@ -282,21 +278,14 @@ int main() {
     mappings.push_back(humidityLocation);
 
 
-    cout << "Part 1 = " << solveSeedList(mappings, seedList) << endl;//173706076 PART1
+    cout << "Part 1 = " << solveSeedList(mappings, seedList) << endl;//173706076 PART1 525 uS
 
-    long minTemp = INT64_MAX;
-    long minHumidity = 0;
-
-    vector<int> locations;
-    int maxLocation = INT32_MIN;
+    long maxLocation = INT64_MIN;
     for (auto p : humidityLocation) {
 
         if (p.valMax > maxLocation) {
             maxLocation = p.valMax;
         }
-        // for (int i = p.valMin; i <= p.valMax; i++) {
-        //     locations.push_back(i);
-        // }
     }
     vector<Entry> seedRanges;
     for (int i = 0; i < seedList.size(); i += 2) {
@@ -311,13 +300,10 @@ int main() {
     cout << "Max Location = " << maxLocation << endl;
 
     cout << "Part 2 = " << solveP2(mappings, maxLocation) << endl;
-    // cout << "Part 2 = " << solveSeedList(mappings, seedList2) << endl;//173706076 PART1
-    
-    // cout << "Part 2 = " << solveP2(mappings, nextSeedList) << endl;//
 
-    // auto end = std::chrono::system_clock::now().time_since_epoch().count();
+    auto end = std::chrono::system_clock::now().time_since_epoch().count();
 
-    // cout << "TIME ELAPSED = " << (timeSinceEpochMillisec() - start) << endl;//1154, 1566, 1900
+    cout << "TIME ELAPSED = " << (avreader::timeSinceEpochMillisec() - start) << endl;//11 Seconds
 
     return 0;
 }

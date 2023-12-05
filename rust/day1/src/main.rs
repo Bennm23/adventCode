@@ -1,26 +1,18 @@
 extern crate utils;
 
-use std::time::SystemTime;
-
 const RADIX : u32 = 10;
 
 fn main() {
-    let start = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
-        Ok(n) => n.as_micros(),
-        Err(_) => panic!("oops")
-    };
 
+    utils::run_and_print_duration(&solve);//941-1200 uS
+
+}
+
+fn solve() {
     let lines = utils::read_file_to_vec("day1.txt");
 
     println!("Part 1 = {}", part1(&lines));//55130
     println!("Part 2 = {}", part2(&lines));//54985
-    let end = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
-        Ok(n) => n.as_micros(),
-        Err(_) => panic!("oops")
-    };
-
-    println!("TIme = {}", (end - start));//941-1200 uS
-
 }
 
 fn part1(lines : &Vec<String>) -> u32 {
