@@ -1,7 +1,12 @@
-
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <memory>
+#include <stdexcept>
+
+#include <sstream>
+
 #include <string>
 #include "../../../../../../usr/include/c++/11/bits/stream_iterator.h"
 #include <chrono>
@@ -10,7 +15,7 @@ using namespace std;
 
 namespace avreader
 {
-    const string FILE_PATH = "/home/benn/CODE/adventCode/";
+    const string FILE_PATH = "/home/bennmellinger/CODE/adventCode/";
 
     vector<string> parseFile(const string fileName) {
         vector<string> lines;
@@ -86,7 +91,67 @@ namespace avreader
         return res;
     }
 
+    struct not_digit {
+        bool operator()(const char c) {
+            return c != ' ' && !std::isdigit(c);
+        }
+    };
 
+    vector<int> parseLineToInts(string str) {
+
+        not_digit not_a_digit;
+        std::string::iterator end = std::remove_if(str.begin(), str.end(), not_a_digit);
+        std::string all_numbers(str.begin(), end);
+        std::stringstream ss(all_numbers);
+        std::vector<int> numbers;
+
+        for(int i = 0; ss >> i; ) {
+            numbers.push_back(i);
+        }
+        return numbers;
+    }
+
+    vector<long> parseLineToLongs(string str) {
+
+        not_digit not_a_digit;
+        std::string::iterator end = std::remove_if(str.begin(), str.end(), not_a_digit);
+        std::string all_numbers(str.begin(), end);
+        std::stringstream ss(all_numbers);
+        std::vector<long> numbers;
+
+        for(long i = 0; ss >> i; ) {
+            numbers.push_back(i);
+        }
+        return numbers;
+    }
+
+    long parseLineToOneLong(string str) {
+        not_digit not_a_digit;
+        std::string::iterator end = std::remove_if(str.begin(), str.end(), not_a_digit);
+        std::string all_numbers(str.begin(), end);
+        std::stringstream ss(all_numbers);
+        cout << "ALL = " << all_numbers << endl;
+
+        string numbers;
+
+
+        for (string s = ""; ss >> s;) {
+            numbers.append(s);
+        }
+        return stol(numbers);
+    }
+
+
+    template<typename ... Args>
+    std::string string_format( const std::string& format, Args ... args )
+    {
+        int size_s = std::snprintf( nullptr, 0, format.c_str(), args ... ) + 1; // Extra space for '\0'
+        if( size_s <= 0 ){ throw std::runtime_error( "Error during formatting." ); }
+        auto size = static_cast<size_t>( size_s );
+        std::unique_ptr<char[]> buf( new char[ size ] );
+        std::snprintf( buf.get(), size, format.c_str(), args ... );
+        return std::string( buf.get(), buf.get() + size - 1 ); // We don't want the '\0' inside
+    }
 
     
 } // namespace avreader
