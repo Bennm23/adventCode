@@ -1,5 +1,6 @@
 
 #include "../utils/AdventReader.h"
+#include "../utils/StringUtils.h"
 
 using namespace std;
 
@@ -7,7 +8,7 @@ struct Race {
     long time, recordDistance;
 
     string asString() {
-        return avreader::string_format("Time = %d, Distance = %d", time, recordDistance);
+        return avstrings::string_format("Time = %d, Distance = %d", time, recordDistance);
     }
 
     long computeWinners() {
@@ -28,8 +29,8 @@ int main() {
         cout << line << endl;
     }
 
-    vector<long> times = avreader::parseLineToLongs(lines[0]);
-    vector<long> distances = avreader::parseLineToLongs(lines[1]);
+    vector<long> times = avstrings::parseLineToLongs(lines[0]);
+    vector<long> distances = avstrings::parseLineToLongs(lines[1]);
     vector<Race> races;
     
     for (int i = 0; i < times.size(); i++) {
@@ -44,8 +45,8 @@ int main() {
 
     cout << "Part 1 = " << total << endl;//771628
 
-    long time = avreader::parseLineToOneLong(lines[0]);
-    long distance = avreader::parseLineToOneLong(lines[1]);
+    long time = avstrings::parseLineToOneLong(lines[0]);
+    long distance = avstrings::parseLineToOneLong(lines[1]);
 
     cout << "Time = " << time << endl;
     cout << "Distance = " << distance << endl;

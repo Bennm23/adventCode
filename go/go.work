@@ -7,5 +7,8 @@ use (
 	./day4
 	./day5
 	./day7
+	./day8
 	./lib
+	./lib/avstrings
+	./lib/maths
 )

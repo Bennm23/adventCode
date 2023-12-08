@@ -7,6 +7,7 @@
 #include <thread>
 #include <future>
 #include "../utils/AdventReader.h"
+#include "../utils/StringUtils.h"
 
 #include <algorithm>
 
@@ -68,7 +69,7 @@ vector<long> readSeedList(ifstream *inFile) {
 
     seedLine.replace(0, 7, "");
 
-    seedList = avreader::splitToLong(seedLine, " ");
+    seedList = avstrings::splitToLong(seedLine, " ");
 
     readToNextSection(inFile, "seed-to-soil map:");
 
@@ -81,7 +82,7 @@ map<long, long> readAndPopulateMap(ifstream *inFile) {
     string line;
     vector<long> row;
     while (getline(*inFile, line)) {
-        row = avreader::splitToLong(line, " ");
+        row = avstrings::splitToLong(line, " ");
 
         if (row.empty()) {
             getline(*inFile, line);//Read one more to the next section header
@@ -110,7 +111,7 @@ vector<Entry> readAndPopulateVec(ifstream *inFile) {
     string line;
     vector<long> row;
     while (getline(*inFile, line)) {
-        row = avreader::splitToLong(line, " ");
+        row = avstrings::splitToLong(line, " ");
 
         if (row.empty()) {
             getline(*inFile, line);//Read one more to the next section header
