@@ -4,6 +4,8 @@
 #include <limits>
 #include <chrono>
 #include <sstream>
+#include <thread>
+#include <future>
 #include "../utils/AdventReader.h"
 
 #include <algorithm>
@@ -191,8 +193,6 @@ long getSeedMapping(MapList mappings, long startVal) {
     return foundSeed ? seedVal : -1;
 }
 long search(MapList mappings, long maxLocation, long bound, long offset) {
-    // int bestLocation;
-    // int bestSeed;
 
     for (long i = 0 + offset; i < maxLocation; i+= bound)
     {
@@ -202,22 +202,16 @@ long search(MapList mappings, long maxLocation, long bound, long offset) {
         {
             cout << "Found New Max at " << i << endl;
             return i;//Once we find a mapping, return the new max
-            // maxLocation = i;//Return
-            // bestSeed = foundSeed;
-            // cout << "Found Best Location = " << maxLocation << endl;
-            // return bestSeed;
         }
     }
     
     return -1;
-
 }
 
 long solveP2(MapList mappings, long maxLocation) {
 
     //Max Location is the highest known mapping to a location
     //Thus any additional default mapping must be higher
-
     //We need to search 0-maxLocation - 1 in large bounds and slowly decrease as our possiilities decrease
     long bound = max(1L, (long)floor(maxLocation / 10));
     long offset = 0;
@@ -241,8 +235,6 @@ long solveP2(MapList mappings, long maxLocation) {
     }
     return maxLocation;
 }
-
-
 
 int main() {
 

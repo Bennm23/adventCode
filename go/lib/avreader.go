@@ -71,3 +71,13 @@ func Min(x int, y int) int {
 	}
 	return y
 }
+
+func CopyMap[K comparable, V any](copy map[K]V) map[K]V {
+	cp := make(map[K]V)
+
+	for k, v := range copy {
+		cp[k] = v
+	}
+
+	return cp
+}
