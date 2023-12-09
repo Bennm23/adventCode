@@ -1,4 +1,4 @@
-go 1.21.4
+go 1.21.5
 
 use (
 	./day1
@@ -8,6 +8,7 @@ use (
 	./day5
 	./day7
 	./day8
+	./day9
 	./lib
 	./lib/avstrings
 	./lib/maths

@@ -7,10 +7,20 @@ import (
 	"time"
 )
 const FILE_PATH = "/home/benn/CODE/adventCode/";
+const LAPTOP_PATH ="/home/bennmellinger/CODE/adventCode/";
+
 
 //Input file name and return array of lines
 func ReadFile(name string) ([]string, error) {
-	file, err := os.Open(FILE_PATH + name)
+	prefix := FILE_PATH
+	_, err := os.Open("/home/benn")
+
+	if err != nil {
+		prefix = LAPTOP_PATH
+	}
+	fmt.Println("OPENING FILE AT ", (prefix + name))
+
+	file, err := os.Open(prefix + name)
 	if err != nil {
 		return nil, err
 	}
