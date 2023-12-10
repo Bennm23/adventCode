@@ -38,6 +38,38 @@ func ReadFile(name string) ([]string, error) {
 	return lines, scanner.Err()
 }
 
+func ReadFileToGrid(name string) ([][]rune, error) {
+	prefix := FILE_PATH
+	_, err := os.Open("/home/benn")
+
+	if err != nil {
+		prefix = LAPTOP_PATH
+	}
+	fmt.Println("OPENING FILE AT ", (prefix + name))
+
+	file, err := os.Open(prefix + name)
+	if err != nil {
+		return nil, err
+	}
+
+	defer file.Close()
+
+	var grid [][]rune
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+
+		var line []rune
+		for _, r := range scanner.Text() {
+			line = append(line, r)
+		}
+		grid = append(grid, line)
+	}
+
+	return grid, scanner.Err()
+}
+
 func ReadFileWithReplace(name string, replacer Formatter) ([]string, error) {
 	file, err := os.Open(FILE_PATH + name)
 	if err != nil {
@@ -90,4 +122,13 @@ func CopyMap[K comparable, V any](copy map[K]V) map[K]V {
 	}
 
 	return cp
+}
+
+func Contains[K comparable](search []K, val K) bool {
+	for _, v := range search {
+		if v == val {
+			return true
+		}
+	}
+	return false
 }

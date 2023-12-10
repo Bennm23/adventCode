@@ -7,16 +7,18 @@ import (
 )
 
 func main() {
-	histories, err := lib.ReadFile("day9.txt")
 
-	if err != nil {
-		panic("Failed to parse Day 9")
-	}
+	lib.RunAndPrintDuration(func() {
+		histories, err := lib.ReadFile("day9.txt")
 
-	p1, p2 := solve(histories)
-	fmt.Println("Part 1 = ", p1)//2105961943
-	fmt.Println("Part 2 = ", p2)//1019
-	
+		if err != nil {
+			panic("Failed to parse Day 9")
+		}
+
+		p1, p2 := solve(histories)
+		fmt.Println("Part 1 = ", p1)//2105961943
+		fmt.Println("Part 2 = ", p2)//1019
+	})//5000-10000
 }
 
 func solve(histories []string) (int, int) {
@@ -31,16 +33,13 @@ func solve(histories []string) (int, int) {
 		var steps [][]int
 		steps = append(steps, historyInts)
 
-
-		done := false;
-
 		var res []int
 		res = historyInts
 
+		done := false;
 		for !done {
 			res = stepDown(res)
 			steps = append(steps, res)
-		
 
 			done = true
 			for _, r := range res {
