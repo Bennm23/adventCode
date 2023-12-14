@@ -42,6 +42,19 @@ namespace avreader
         return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     }
 
+    uint64_t timeSinceEpochMicros() {
+        using namespace std::chrono;
+        return duration_cast<microseconds>(system_clock::now().time_since_epoch()).count();
+    }
+
+    template <typename F>
+    void runAndPrintMicros(F&& runner) {
+        auto start = timeSinceEpochMicros();
+        runner();
+        cout << timeSinceEpochMicros() - start << " Microseconds" << endl;
+
+    }
+
     vector<vector<string>> parseFileToGrid(const string fileName) {
         vector<vector<string>> lines;
     
@@ -51,20 +64,31 @@ namespace avreader
 
         while (std::getline(inFile, line)) {
             vector<string> row;
-            
-
-            // std::stringstream ss(line);
-
-            // std::istream_iterator<std::string> begin(ss);
-            // std::istream_iterator<std::string> end;
-            // std::vector<std::string> vstrings(begin, end);
-            // std::copy(vstrings.begin(), vstrings.end(), std::ostream_iterator<std::string>(std::cout, "\n")); 
-            
             lines.push_back(row);
         }
 
         return lines;
     }
 
+    vector<vector<string>> parseFileToGroups(const string fileName, const string delimeter) {
+        vector<vector<string>> groups;
+    
+        ifstream inFile(FILE_PATH + fileName);
+
+        string line;
+
+        vector<string> *group = new vector<string>();
+        while (std::getline(inFile, line)) {
+            if (line == delimeter) {
+                groups.push_back(*group);
+                group = new vector<string>();
+                continue;
+            }
+            group->push_back(line);
+        }
+        groups.push_back(*group);
+
+        return groups;
+    }
  
 } // namespace avreader

@@ -12,14 +12,9 @@ const LAPTOP_PATH ="/home/bennmellinger/CODE/adventCode/";
 
 //Input file name and return array of lines
 func ReadFile(name string) ([]string, error) {
-	prefix := FILE_PATH
-	_, err := os.Open("/home/benn")
+	prefix := prefix()
 
-	if err != nil {
-		prefix = LAPTOP_PATH
-	}
 	fmt.Println("OPENING FILE AT ", (prefix + name))
-
 	file, err := os.Open(prefix + name)
 	if err != nil {
 		return nil, err
@@ -38,15 +33,50 @@ func ReadFile(name string) ([]string, error) {
 	return lines, scanner.Err()
 }
 
-func ReadFileToGrid(name string) ([][]rune, error) {
+func ReadFileToGroups(name, delimeter string) [][]string {
+	prefix := prefix()
+
+	fmt.Println("OPENING FILE AT ", (prefix + name))
+	file, err := os.Open(FILE_PATH + name)
+	if err != nil {
+		panic("Failed To Open File")
+	}
+
+	defer file.Close()
+
+	var groups [][]string
+
+	scanner := bufio.NewScanner(file)
+
+	temps := make([]string, 0)
+	for scanner.Scan() {
+		if scanner.Text() == delimeter {
+			
+			groups = append(groups, temps)
+			temps = make([]string, 0)
+			continue
+		}
+		temps = append(temps, scanner.Text())
+	}
+	groups = append(groups, temps)//Catch the last group
+
+	return groups
+}
+
+func prefix() string {
 	prefix := FILE_PATH
 	_, err := os.Open("/home/benn")
 
 	if err != nil {
 		prefix = LAPTOP_PATH
 	}
-	fmt.Println("OPENING FILE AT ", (prefix + name))
+	return prefix
+}
 
+func ReadFileToGrid(name string) ([][]rune, error) {
+	prefix := prefix()
+
+	fmt.Println("OPENING FILE AT ", (prefix + name))
 	file, err := os.Open(prefix + name)
 	if err != nil {
 		return nil, err
