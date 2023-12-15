@@ -127,4 +127,16 @@ namespace avstrings
 
         return res.str();
     }
+
+    vector<int> stringsToInt(vector<string> strings) {
+        vector<int> res;
+        for (auto s : strings) {
+            res.push_back(stoi(s));
+        }
+        return res;
+    }
+
+    bool contains(string str, string val) {
+        return str.find(val) != string::npos;
+    }
 }

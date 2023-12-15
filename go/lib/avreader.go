@@ -162,3 +162,16 @@ func Contains[K comparable](search []K, val K) bool {
 	}
 	return false
 }
+
+func Repeat[T any](arr []T, repeats int) []T {
+	var res []T
+
+	for i := 0; i < repeats; i++ {
+
+		for _, val := range arr {
+			res = append(res, val)
+		}
+	}
+
+	return res
+}

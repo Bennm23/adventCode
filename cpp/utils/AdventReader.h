@@ -91,4 +91,14 @@ namespace avreader
         return groups;
     }
  
+    template <typename T>
+    vector<T> slice(vector<T> toSlice, int from = 0, int to = -1) {
+        if (to == -1)
+        {
+            to = toSlice.size();
+        }
+        
+        return vector<T>(toSlice.begin() + from, toSlice.end());
+    }
+ 
 } // namespace avreader

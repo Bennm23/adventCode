@@ -59,10 +59,6 @@ void checkReflections(const vector<vector<char>> &grid, int &p1, int &p2) {
     }
 }
 
-void solve() {
-
-}
-
 int main() {
 
 

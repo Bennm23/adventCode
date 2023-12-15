@@ -41,3 +41,16 @@ func SplitTextToInts(str string) []int {
 
 	return ints
 }
+
+func StringsToInts(arr []string) []int {
+	var ints []int
+
+	for _, val := range arr {
+		v, err := strconv.Atoi(val)
+		if err != nil {
+			panic(err)
+		}
+		ints = append(ints, v)
+	}
+	return ints
+}
