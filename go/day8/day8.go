@@ -18,10 +18,8 @@ func (n *Node) str() string {
 	return fmt.Sprintf("%s [%s, %s]", n.name, n.leftNode, n.rightNode)	
 }
 func main() {
-	lines, err := lib.ReadFile("day8.txt")
-	if err != nil {
-		panic("Failed to read day8")
-	}
+	lines := lib.ReadFile("day8.txt")
+
 	nodes := make(map[string]*Node)
 	var startNodes []*Node
 

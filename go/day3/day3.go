@@ -30,10 +30,7 @@ func part2() int {
 	starFind := regexp.MustCompile(`\*`)
 	isNumber := regexp.MustCompile(`[0-9]+`)
 
-	grid, err := lib.ReadFile("day3.txt")
-	if err != nil {
-		panic("Failed to parse Day3")
-	}
+	grid := lib.ReadFile("day3.txt")
 
 	var starIndices [][][]int
 

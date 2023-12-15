@@ -9,11 +9,7 @@ import (
 func main() {
 
 	lib.RunAndPrintDuration(func() {
-		histories, err := lib.ReadFile("day9.txt")
-
-		if err != nil {
-			panic("Failed to parse Day 9")
-		}
+		histories := lib.ReadFile("day9.txt")
 
 		p1, p2 := solve(histories)
 		fmt.Println("Part 1 = ", p1)//2105961943

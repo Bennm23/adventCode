@@ -112,15 +112,10 @@ func getHandType(useCount map[rune]int) int {
 }
 
 func main() {
-	lines, err := lib.ReadFile("day7.txt")
+	lines := lib.ReadFile("day7.txt")
 
 	var hands []Hand
 
-
-
-	if err != nil {
-		panic("Failed to Parse Day6")
-	}
 	rankings := make(map[rune]int)
 	rankings['A'] = 1
 	rankings['K'] = 2

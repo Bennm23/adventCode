@@ -14,11 +14,7 @@ func main() {
 }
 
 func solve() {
-	lines, err  := lib.ReadFile("day1.txt")
-
-	if err != nil {
-		panic("Error Reading day1.txt")
-	}
+	lines := lib.ReadFile("day1.txt")
 
 	re := regexp.MustCompile("[0-9]")
 	fmt.Println("PART 1 = ", part1(lines, re))//55130

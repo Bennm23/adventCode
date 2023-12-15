@@ -13,12 +13,8 @@ func main() {
 	fmt.Println("Day2")
 
 	lib.RunAndPrintDuration(func() {//649-724
-		lines, err := lib.ReadFile("day2.txt")
+		lines := lib.ReadFile("day2.txt")
 
-		if err != nil {
-			panic("Failed to parse day2.txt")
-		}
-		
 		p1, p2 := solve(lines)
 
 		fmt.Println("PART 1 = ", p1)//2879
