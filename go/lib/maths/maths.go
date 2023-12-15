@@ -1,5 +1,10 @@
 package maths
 
+import (
+	"fmt"
+	"hash/fnv"
+)
+
 type Number interface {
 	int | int8 | int16 | int32 | int64 
 }
@@ -31,4 +36,14 @@ func Transpose[T any](matrix [][]T) [][]T {
 	}
 
 	return transposed
+}
+
+func GenerateHash(values ...interface{}) uint64 {
+	hash := fnv.New64a()
+
+	for _, val := range values {
+		hash.Write([]byte(fmt.Sprintf("%v", val)))
+	}
+
+	return hash.Sum64()
 }

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 )
 const FILE_PATH = "/home/benn/CODE/adventCode/";
@@ -11,13 +12,13 @@ const LAPTOP_PATH ="/home/bennmellinger/CODE/adventCode/";
 
 
 //Input file name and return array of lines
-func ReadFile(name string) ([]string, error) {
+func ReadFile(name string) []string {
 	prefix := prefix()
 
 	fmt.Println("OPENING FILE AT ", (prefix + name))
 	file, err := os.Open(prefix + name)
 	if err != nil {
-		return nil, err
+		panic(fmt.Sprintf("Failed to Open %s", name))
 	}
 
 	defer file.Close()
@@ -30,7 +31,34 @@ func ReadFile(name string) ([]string, error) {
 		lines = append(lines, scanner.Text())
 	}
 
-	return lines, scanner.Err()
+	if scanner.Err() != nil {
+		panic(fmt.Sprintf("Scanner Err %s", scanner.Err().Error()))
+	}
+
+	return lines
+}
+
+func ReadOneLineToChunks(name, seperator string) []string {
+	prefix := prefix()
+
+	fmt.Println("OPENING FILE AT ", (prefix + name))
+	file, err := os.Open(prefix + name)
+	if err != nil {
+		panic(err)
+	}
+
+	defer file.Close()
+
+	var line string
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		line = scanner.Text()
+	}
+
+	return strings.Split(line, seperator)
+
 }
 
 func ReadFileToGroups(name, delimeter string) [][]string {

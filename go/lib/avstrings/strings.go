@@ -54,3 +54,30 @@ func StringsToInts(arr []string) []int {
 	}
 	return ints
 }
+
+func Join(seperator, srcString string, repeats int) string {
+	res := ""
+
+
+	for i := 0; i < repeats; i++ {
+		res += srcString
+
+		if i != repeats - 1 {
+			res += seperator
+		}
+	}
+
+	return res
+
+}
+
+func In(char byte, pattern string) bool {
+
+	for _, c := range pattern {
+		if c == rune(char) {
+			return true
+		}
+	}
+
+	return false
+}
