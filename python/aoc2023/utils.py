@@ -27,3 +27,9 @@ def __runWithTime(transition, type, fn):
     end = time.perf_counter_ns() * transition
     print('Duration ', type, ' = ', end - start)
     
+
+    
+val = "rn=1"
+v2 = "cd-"
+
+print("one = ", val.find("="))
