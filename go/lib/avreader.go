@@ -101,13 +101,13 @@ func prefix() string {
 	return prefix
 }
 
-func ReadFileToGrid(name string) ([][]rune, error) {
+func ReadFileToGrid(name string) [][]rune {
 	prefix := prefix()
 
 	fmt.Println("OPENING FILE AT ", (prefix + name))
 	file, err := os.Open(prefix + name)
 	if err != nil {
-		return nil, err
+		panic(fmt.Sprintf("Failed to Open %s", name))
 	}
 
 	defer file.Close()
@@ -125,7 +125,41 @@ func ReadFileToGrid(name string) ([][]rune, error) {
 		grid = append(grid, line)
 	}
 
-	return grid, scanner.Err()
+	if scanner.Err() != nil {
+		panic(scanner.Err())
+	}
+
+	return grid
+}
+func ReadFileToTypeGrid[T any](name string, convert func(rune)T) [][]T {
+	prefix := prefix()
+
+	fmt.Println("OPENING FILE AT ", (prefix + name))
+	file, err := os.Open(prefix + name)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to Open %s", name))
+	}
+
+	defer file.Close()
+
+	var grid [][]T
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+
+		var line []T
+		for _, r := range scanner.Text() {
+			line = append(line, convert(r))
+		}
+		grid = append(grid, line)
+	}
+
+	if scanner.Err() != nil {
+		panic(scanner.Err())
+	}
+
+	return grid
 }
 
 func ReadFileWithReplace(name string, replacer Formatter) ([]string, error) {
@@ -156,6 +190,11 @@ func RunAndPrintDuration(solver Solver) {
 	start := time.Now().UnixMicro()
 	solver()
 	fmt.Println("Duration = ", (time.Now().UnixMicro() - start))
+}
+func RunAndPrintDurationMillis(solver Solver) {
+	start := time.Now().UnixMilli()
+	solver()
+	fmt.Println("Duration = ", (time.Now().UnixMilli() - start))
 }
 
 func Max(x int, y int) int {

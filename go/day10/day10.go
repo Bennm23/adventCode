@@ -19,11 +19,7 @@ const (
 )
 func main() {
 
-	grid, err := lib.ReadFileToGrid("day10.txt")
-
-	if err != nil {
-		panic("Failed to Read Day10")
-	}
+	grid := lib.ReadFileToGrid("day10.txt")
 	
 	var start Position
 
