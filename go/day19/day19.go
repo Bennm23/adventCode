@@ -99,7 +99,7 @@ func (flow Workflow) evaluate(part Part) string {
 }
 
 func solve() {
-    groups := lib.ReadFileToGroups("sample", "")
+    groups := lib.ReadFileToGroups("day19.txt", "")
     workflows := make(WorkflowMap)
     parts := make([]Part, 0)
 
@@ -133,7 +133,7 @@ func solve() {
 	intervals["a"] = Interval{1, 4000}
 	intervals["s"] = Interval{1, 4000}
 
-	fmt.Println("Part 2 = ", p2(intervals, &workflows, "in"))
+	fmt.Println("Part 2 = ", p2(intervals, &workflows, "in"))//127517902575337
 
 	fmt.Println("Intervals = ", intervals)
 
@@ -160,6 +160,16 @@ func multiplyIntervals(intervals IntervalMap) int64 {
 	return product
 }
 
+func handleOutcome(intervals IntervalMap, workflows *WorkflowMap, outcome string) int64 {
+	if outcome == "A" {
+		return multiplyIntervals(intervals)
+	} else if outcome != "R" {
+		return p2(intervals, workflows, outcome)
+	}
+
+	return 0
+}
+
 func p2(intervals IntervalMap, workflows *WorkflowMap, workflowId string) int64 {
 
 	var combined int64 = 0
@@ -171,47 +181,33 @@ func p2(intervals IntervalMap, workflows *WorkflowMap, workflowId string) int64 
 		fmt.Println("New Intervals = ", newIntervals)
 		currInterval, found := newIntervals[condition.which]
 
-		if found {
-			fmt.Println("Found ", condition.which, " In Intervals")
-			
-		}
-
+		//Found is true if which == 'x|m|a|s'
 		if found && condition.lessThan {
 			prevInterval := intervals[condition.which]
 			prevInterval.start = condition.num
 			intervals[condition.which] = prevInterval
+
 			currInterval.end = condition.num - 1
 			newIntervals[condition.which] = currInterval
 
 			fmt.Println("Less Than Condition Outcome = ", condition.outcome)
-			if condition.outcome == "A" {
-				combined += multiplyIntervals(newIntervals)
-			} else if condition.outcome != "R" {
-				combined += p2(newIntervals, workflows, condition.outcome)
-			}
+			combined += handleOutcome(newIntervals, workflows, condition.outcome)
 			
 		} else if found && !condition.lessThan {
 			fmt.Println("Greater Than Condition Outcome = ", condition.outcome)
 			prevInterval := intervals[condition.which]
 			prevInterval.end = condition.num
 			intervals[condition.which] = prevInterval
+
 			currInterval.start = condition.num + 1
 			newIntervals[condition.which] = currInterval
 
-			if condition.outcome == "A" {
-				combined += multiplyIntervals(newIntervals)
-			} else if condition.outcome != "R" {
-				combined += p2(newIntervals, workflows, condition.outcome)
-			}
-		} else if condition.which == "A" {
-			combined += multiplyIntervals(intervals)
+			combined += handleOutcome(newIntervals, workflows, condition.outcome)
+
 		} else if condition.which != "R" {
-			combined += p2(intervals, workflows, condition.which)
+			combined += handleOutcome(intervals, workflows, condition.which)
 		}
-
-
 	}
 
 	return combined
-
 }
