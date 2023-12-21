@@ -2,6 +2,7 @@ package main
 
 import (
 	"advent/lib"
+	"advent/lib/maths"
 	"advent/lib/structures"
 	"fmt"
 	"strings"
@@ -55,6 +56,11 @@ var lowPulses int64 = 0
 var highPulses int64 = 0
 
 func main() {
+	lib.RunAndPrintDurationMillis(func() {
+		solve()
+	})//13500-14000, 13-14 MS
+}
+func solve() {
 
     lines := lib.ReadFile("day20.txt")
 
@@ -86,13 +92,23 @@ func main() {
 
 	p1 := int64(0)
 
-    i := 0
+	lowest := lib.AnyMap[string, int64]{} 
+
+    i := int64(0)
     for {
 
         //At the start of each for, push button
         lowPulses++
 		reactions := structures.NewStack[Pulse]()
-        results := broadcaster.sendPulse(false, moduleMap)
+        results, foundName := broadcaster.sendPulse(false, moduleMap)
+		if foundName != "none" {
+			fmt.Println("Found ", foundName, " At Button Press = ", i+1)
+			_, exists := lowest[foundName]
+			if !exists {
+				lowest[foundName] = i+1
+			}
+			
+		}
 		reactions.PushAll(results)
 
         for reactions.Size() > 0 {
@@ -102,25 +118,51 @@ func main() {
             if !found {
                 panic(found)
             }
-			reactions.PushAll(sender.sendPulse(reaction.onOff, moduleMap))
+			results, foundName := sender.sendPulse(reaction.onOff, moduleMap)
+			if foundName != "none" {
+				fmt.Println("Found ", foundName, " At Button Press = ", i+1)
+				_, exists := lowest[foundName]
+				if !exists {
+					lowest[foundName] = i+1
+				}
+			}
+			reactions.PushAll(results)
         }
 
         if i == 999 {
             p1 = lowPulses * highPulses
             fmt.Println("Part One = ", p1)//737679780
-            break
+            // break
         }
         i++
+
+		if (len(lowest) == 4) {break}
     }
 
+	fmt.Println("Lowest Multiples")
+	for k, v := range lowest {
+		fmt.Println("Key ", k, " = ", v)
+	}
+
+	valSet := lowest.ValueSet()
+
+	lcm := maths.LcmRange(valSet...)
+
+	fmt.Println("Part 2 = ", lcm)//227411378431763
 }
 
 type ModuleMap map[string]*Module
 
-func (module *Module) sendPulse(onOff bool, moduleMap ModuleMap) []Pulse {
+func (module *Module) sendPulse(onOff bool, moduleMap ModuleMap) ([]Pulse, string) {
     results := make([]Pulse, 0)
 
+	foundName := "none"
+
     for _, child := range module.destinations {
+		if !onOff && (child == "vz" || child == "bq" || child == "qh" || child == "lt") {
+			fmt.Println("Found Destinations = ", module.destinations)
+			foundName  = child
+		}
         if onOff {
             highPulses++
         } else {
@@ -136,7 +178,7 @@ func (module *Module) sendPulse(onOff bool, moduleMap ModuleMap) []Pulse {
             results = append(results, res)
         }
     }
-    return results
+    return results, foundName
 }
 
 type Pulse struct {

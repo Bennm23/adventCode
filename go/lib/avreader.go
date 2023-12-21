@@ -235,10 +235,20 @@ func Repeat[T any](arr []T, repeats int) []T {
 
 	for i := 0; i < repeats; i++ {
 
-		for _, val := range arr {
-			res = append(res, val)
-		}
+		res = append(res, arr...)
 	}
 
 	return res
+}
+
+type AnyMap[T comparable, R any] map[T]R
+
+func (mp AnyMap[T, R]) ValueSet() []R {
+	values := []R{}
+
+	for _, val := range mp {
+		values = append(values, val)
+	}
+
+	return values
 }

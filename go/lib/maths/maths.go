@@ -21,6 +21,23 @@ func Lcm[T Number](a, b T) T {
 	return (a * b) / Gcd(a, b)
 }
 
+func LcmRange[T Number]( vals ... T) T {
+	if len(vals) < 2 {
+		panic("LCM RANGE TO SMALL")
+	}
+	var res T = Lcm(vals[0], vals[1])
+	
+	if len(vals) == 2 {
+		return res
+	}
+
+	for _, val := range vals[2:] {
+		res = Lcm(res, val)
+	}
+
+	return res
+}
+
 func Transpose[T any](matrix [][]T) [][]T {
 	transposed := make([][]T, len(matrix[0]))
 
