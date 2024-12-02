@@ -27,8 +27,8 @@
             "args": [],
             "stopAtEntry": false,
             "externalConsole": false,
-            "cwd": "/home/bennmellinger/CODE/adventCode/cpp/utils",
-            "program": "/home/bennmellinger/CODE/adventCode/cpp/utils/build/Debug/outDebug",
+            "cwd": "/home/bennmellinger/CODE/adventCode/2023/cpp/utils",
+            "program": "/home/bennmellinger/CODE/adventCode/2023/cpp/utils/build/Debug/outDebug",
             "MIMode": "gdb",
             "miDebuggerPath": "gdb",
             "setupCommands": [

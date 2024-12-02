@@ -3,7 +3,7 @@ use std::{
     time::SystemTime,
 };
 
-const TXT_PATH : &str = "/home/benn/CODE/adventCode/2024/";
+const TXT_PATH : &str = "/home/benn/CODE/adventCode/2023/";
 
 pub fn read_file_to_vec(day_file : &str) -> Vec<String> {
     let file_path = format!("{TXT_PATH}{day_file}");

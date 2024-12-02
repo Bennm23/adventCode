@@ -60,7 +60,6 @@ fn main() {
         similarity += left[i] * map.get(&left[i]).unwrap();
     }
 
-    println!("Length = {:?}, {:?}", left.len(), right.len());
     println!("Distance = {distance}");
     println!("Similarity = {similarity}");
 }
