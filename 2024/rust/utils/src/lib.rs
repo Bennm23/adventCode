@@ -3,7 +3,7 @@ use std::{
     time::SystemTime,
 };
 
-const TXT_PATH : &str = "/home/benn/CODE/adventCode/2024/";
+const TXT_PATH : &str = "/home/benn/CODE/adventCode/2024/inputs/";
 
 pub fn read_file_to_vec(day_file : &str) -> Vec<String> {
     let file_path = format!("{TXT_PATH}{day_file}");
@@ -15,6 +15,47 @@ pub fn read_file_to_vec(day_file : &str) -> Vec<String> {
         .collect();
     lines
 }
+
+pub fn read_file_to_grid(day_file : &str) -> Vec<Vec<char>> {
+    let file_path = format!("{TXT_PATH}{day_file}");
+    let contents = fs::read_to_string(file_path)
+        .expect("Could Not Parse File");
+
+    let lines: Vec<Vec<char>> = contents.split("\n")
+        .map(|s : &str| s.chars().collect())
+        .filter(|f : &Vec<char>| !f.is_empty())
+        .collect();
+    lines
+}
+
+const DEBUG : bool = false;
+
+pub fn log(s : &str, newline : bool, always : bool) {
+    if DEBUG || always {
+        
+        if newline {
+            println!("{s}");
+        } else {
+            print!("{s}")
+        }
+    }
+
+}
+
+#[macro_export]
+macro_rules! log {
+
+    ($s:expr, $newline: expr) => {
+        log($s, $newline, false);
+    };
+    ($s: expr) => {
+        log($s, true, false);
+    };
+    () => {
+        log("", true, false);
+    };
+}
+
 
 // pub fn add(left: usize, right: usize) -> usize {
 //     left + right
