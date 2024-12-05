@@ -73,7 +73,7 @@ macro_rules! log {
 // }
 
 
-pub fn run_and_print_duration(solver : &dyn Fn()) {
+pub fn run_and_print_duration(title : &str, solver : &dyn Fn()) {
     let start = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
         Ok(n) => n.as_micros(),
         Err(_) => panic!("oops")
@@ -86,5 +86,5 @@ pub fn run_and_print_duration(solver : &dyn Fn()) {
         Err(_) => panic!("oops")
     };
 
-    println!("TIme = {}", (end - start));
+    println!("{title} Ran For = {} us", (end - start));
 }
