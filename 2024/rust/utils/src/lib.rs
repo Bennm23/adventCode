@@ -1,6 +1,5 @@
 use std::{
-    fs,
-    time::SystemTime,
+    fmt::Display, fs, time::SystemTime
 };
 
 const TXT_PATH : &str = "/home/benn/CODE/adventCode/2024/inputs/";
@@ -55,6 +54,30 @@ macro_rules! log {
         log("", true, false);
     };
 }
+pub fn logs(s : &String, newline : bool, always : bool) {
+    if DEBUG || always {
+        if newline {
+            println!("{s}");
+        } else {
+            print!("{s}")
+        }
+    }
+
+}
+
+#[macro_export]
+macro_rules! logs {
+
+    ($s:expr, $newline: expr) => {
+        logs($s, $newline, false);
+    };
+    ($s: expr) => {
+        logs($s, true, false);
+    };
+    () => {
+        logs("", true, false);
+    };
+}
 
 
 // pub fn add(left: usize, right: usize) -> usize {
@@ -87,4 +110,20 @@ pub fn run_and_print_duration(title : &str, solver : &dyn Fn()) {
     };
 
     println!("{title} Ran For = {} us", (end - start));
+}
+
+pub fn run_and_score<R : Display, F :Fn() -> R>(title : &str, solver : F) {
+    let start = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
+        Ok(n) => n.as_micros(),
+        Err(_) => panic!("oops")
+    };
+    
+    let res = solver();
+
+    let end = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
+        Ok(n) => n.as_micros(),
+        Err(_) => panic!("oops")
+    };
+
+    println!("{title}: Result = {}. Ran For = {} us", res, (end - start));
 }
