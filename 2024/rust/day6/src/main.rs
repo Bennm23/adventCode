@@ -1,6 +1,6 @@
 use std::{collections::HashSet, fs};
 
-use utils::{log, run_and_score};
+use utils::{get_advent_path, log, run_and_score};
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
 struct Position(usize, usize);
@@ -91,7 +91,7 @@ impl Guard {
 }
 
 fn p1() -> i32 {
-    let contents = fs::read_to_string("/home/benn/CODE/adventCode/2024/inputs/day6.txt")
+    let contents = fs::read_to_string(get_advent_path("day6.txt"))
         .expect("Could Not Parse File");
 
     let grid: Vec<Vec<char>> = contents.split("\n")
@@ -143,7 +143,7 @@ fn print_state(guard : Guard, grid : &Vec<Vec<char>>) {
 }
 
 fn p2() -> i32 {
-    let contents = fs::read_to_string("/home/benn/CODE/adventCode/2024/inputs/day6.txt")
+    let contents = fs::read_to_string(get_advent_path("day6.txt"))
         .expect("Could Not Parse File");
 
     let initial_grid: Vec<Vec<char>> = contents.split("\n")

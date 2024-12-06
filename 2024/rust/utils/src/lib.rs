@@ -2,10 +2,20 @@ use std::{
     fmt::Display, fs, time::SystemTime
 };
 
-const TXT_PATH : &str = "/home/benn/CODE/adventCode/2024/inputs/";
+use home::home_dir;
+
+pub fn get_advent_path(day_file : &str) -> String {
+    
+    match home::home_dir() {
+        Some(path) => {
+            return format!("{}/CODE/adventCode/2024/inputs/{}", path.display(), day_file)
+        }
+        None => panic!("Home Dir not set")
+    }
+}
 
 pub fn read_file_to_vec(day_file : &str) -> Vec<String> {
-    let file_path = format!("{TXT_PATH}{day_file}");
+    let file_path = get_advent_path(day_file);
     let contents = fs::read_to_string(file_path)
         .expect("Could Not Parse File");
 
@@ -16,7 +26,7 @@ pub fn read_file_to_vec(day_file : &str) -> Vec<String> {
 }
 
 pub fn read_file_to_grid(day_file : &str) -> Vec<Vec<char>> {
-    let file_path = format!("{TXT_PATH}{day_file}");
+    let file_path = get_advent_path(day_file);
     let contents = fs::read_to_string(file_path)
         .expect("Could Not Parse File");
 
