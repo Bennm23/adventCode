@@ -2,6 +2,8 @@ use std::{
     fmt::Display, fs, time::SystemTime
 };
 
+use regex::Regex;
+
 pub fn get_advent_path(day_file : &str) -> String {
     
     match home::home_dir() {
@@ -134,4 +136,11 @@ pub fn run_and_score<R : Display, F :Fn() -> R>(title : &str, solver : F) {
     };
 
     println!("{title}: Result = {}. Ran For = {} us", res, (end - start));
+}
+
+pub fn remove_between_or_after(text: &str, start: &str, end: &str) -> String {
+    // Build the non-greedy regex pattern
+    let pattern = format!(r"{}.*?{}|{}.*", regex::escape(start), regex::escape(end), regex::escape(start));
+    let re = Regex::new(&pattern).unwrap();
+    re.replace_all(text, "").to_string()
 }
