@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 )
-const FILE_PATH = "/home/benn/CODE/adventCode/";
-const LAPTOP_PATH ="/home/bennmellinger/CODE/adventCode/";
+const FILE_PATH = "/home/benn/CODE/adventCode/2023/";
+const LAPTOP_PATH ="/home/benn-mellinger/CODE/adventCode/2023/";
 
 
 //Input file name and return array of lines

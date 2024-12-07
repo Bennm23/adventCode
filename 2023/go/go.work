@@ -27,5 +27,4 @@ use (
 	./lib/avstrings
 	./lib/maths
 	./lib/structures
-	/home/benn/CODE/go-z3
 )
