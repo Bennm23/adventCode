@@ -2,8 +2,6 @@ use std::{
     fmt::Display, fs, time::SystemTime
 };
 
-use home::home_dir;
-
 pub fn get_advent_path(day_file : &str) -> String {
     
     match home::home_dir() {
@@ -21,6 +19,7 @@ pub fn read_file_to_vec(day_file : &str) -> Vec<String> {
 
     let lines: Vec<String> = contents.split("\n")
         .map(|s : &str| s.to_string())
+        .filter(|f : &String| !f.is_empty())
         .collect();
     lines
 }
@@ -48,7 +47,6 @@ pub fn log(s : &str, newline : bool, always : bool) {
             print!("{s}")
         }
     }
-
 }
 
 #[macro_export]
