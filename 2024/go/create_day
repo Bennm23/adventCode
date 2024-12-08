@@ -11,6 +11,8 @@ FILE=$1.go
 touch $FILE
 
 echo "package main" >> $FILE
+echo "" >> $FILE
+echo "" >> $FILE
 echo "func main() {" >> $FILE
 echo "}" >> $FILE
 

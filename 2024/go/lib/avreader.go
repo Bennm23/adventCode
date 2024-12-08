@@ -131,7 +131,7 @@ func ReadFileToGrid(name string) [][]rune {
 
 	return grid
 }
-func ReadFileToTypeGrid[T any](name string, convert func(rune) T) [][]T {
+func ReadFileToTypeGrid[T any](name string, convert func(string) []T) [][]T {
 	prefix := prefix()
 
 	fmt.Println("OPENING FILE AT ", (prefix + name))
@@ -147,12 +147,7 @@ func ReadFileToTypeGrid[T any](name string, convert func(rune) T) [][]T {
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
-
-		var line []T
-		for _, r := range scanner.Text() {
-			line = append(line, convert(r))
-		}
-		grid = append(grid, line)
+		grid = append(grid, convert(scanner.Text()))
 	}
 
 	if scanner.Err() != nil {
