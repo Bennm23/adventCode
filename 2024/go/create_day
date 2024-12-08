@@ -1,0 +1,20 @@
+#!/bin/bash
+
+mkdir $1
+
+cd $1
+
+go mod init $1
+
+FILE=$1.go
+
+touch $FILE
+
+echo "package main" >> $FILE
+echo "func main() {" >> $FILE
+echo "}" >> $FILE
+
+cd ..
+
+go work use $1
+
