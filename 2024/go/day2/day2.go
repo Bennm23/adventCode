@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	lib.RunAndScore("Part 1", p1)//Score = 624. Total Time 1085 us
-	lib.RunAndScore("Part 2", p2)//Score = 658. Total Time 1197 us
+	lib.RunAndScore("Part 1", p1)//Score = 624. Total Time 404 us
+	lib.RunAndScore("Part 2", p2)//Score = 658. Total Time 437 us
 }
 
 func getReports() [][]int {

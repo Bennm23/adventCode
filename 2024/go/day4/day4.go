@@ -5,8 +5,8 @@ import (
 )
 
 func main() {
-    lib.RunAndScore("Part 1", p1)//2547 Time = 1119 us
-    lib.RunAndScore("Part 2", p2)//1939 Time = 654 us
+    lib.RunAndScore("Part 1", p1)//2547 Time = 775 us
+    lib.RunAndScore("Part 2", p2)//1939 Time = 392 us
 }
 
 type Location struct {

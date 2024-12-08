@@ -10,8 +10,8 @@ import (
 
 func main() {
 
-	lib.RunAndScore("Part 1", p1)//Score = 1579939.  Time 977 us
-	lib.RunAndScore("Part 2", p2)//Score = 20351745. Time 2407 us
+	lib.RunAndScore("Part 1", p1)//Score = 1579939.  Time 284 us
+	lib.RunAndScore("Part 2", p2)//Score = 20351745. Time 603 us
 }
 
 type Pair struct {

@@ -144,6 +144,6 @@ fn print_state(grid : &Grid, antinodes : &HashSet<Position>) {
 }
 
 fn main() {
-    run_and_score("Part 1", || p1());//Total  308, 2925 us
-    run_and_score("Part 2", || p2());//Total 1147, 4262 us
+    run_and_score("Part 1", || p1());//Total  308, 159 us
+    run_and_score("Part 2", || p2());//Total 1147, 238 us
 }
