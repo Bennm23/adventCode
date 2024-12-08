@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -288,4 +289,27 @@ func (mp AnyMap[T, R]) ValueSet() []R {
 	}
 
 	return values
+}
+
+func FindAllMatches(regex string, source string) []string {
+	matcher := regexp.MustCompile(regex)
+	results := matcher.FindAllString(source, -1)
+
+	return results
+}
+
+func EvaluateMatch[T any](regex, source string, evaluate func([]string) T) T {
+
+	matcher := regexp.MustCompile(regex)
+	result := matcher.FindAllString(source, -1)
+
+	return evaluate(result)
+}
+
+func RemoveStrBetweenOrAfter(text string, before string, after string) string {
+
+	match_string := fmt.Sprintf("%s.*?%s|%s.*",before, after, before)
+	matcher := regexp.MustCompile(match_string)
+
+	return matcher.ReplaceAllString(text, "_X_")
 }

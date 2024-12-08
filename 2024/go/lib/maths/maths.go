@@ -3,6 +3,7 @@ package maths
 import (
 	"fmt"
 	"hash/fnv"
+	"strconv"
 )
 
 type Number interface {
@@ -63,4 +64,13 @@ func GenerateHash(values ...interface{}) uint64 {
 	}
 
 	return hash.Sum64()
+}
+
+func ToInt(s string) int {
+	res, err := strconv.Atoi(s)
+
+	if err != nil {
+		panic(err)
+	}
+	return res
 }
