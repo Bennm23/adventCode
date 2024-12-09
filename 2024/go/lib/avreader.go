@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"advent/lib/maths"
 	"bufio"
 	"fmt"
 	"os"
@@ -66,7 +67,7 @@ func ReadFileToGroups(name, delimeter string) [][]string {
 	prefix := prefix()
 
 	fmt.Println("OPENING FILE AT ", (prefix + name))
-	file, err := os.Open(FILE_PATH + name)
+	file, err := os.Open(prefix + name)
 	if err != nil {
 		panic("Failed To Open File")
 	}
@@ -279,18 +280,6 @@ func Repeat[T any](arr []T, repeats int) []T {
 	return res
 }
 
-type AnyMap[T comparable, R any] map[T]R
-
-func (mp AnyMap[T, R]) ValueSet() []R {
-	values := []R{}
-
-	for _, val := range mp {
-		values = append(values, val)
-	}
-
-	return values
-}
-
 func FindAllMatches(regex string, source string) []string {
 	matcher := regexp.MustCompile(regex)
 	results := matcher.FindAllString(source, -1)
@@ -312,4 +301,15 @@ func RemoveStrBetweenOrAfter(text string, before string, after string) string {
 	matcher := regexp.MustCompile(match_string)
 
 	return matcher.ReplaceAllString(text, "_X_")
+}
+
+func SplitStringToInts(str string, delimeter string) []int {
+	split := strings.Split(str, delimeter)
+
+	var vals []int
+
+	for _, s := range split {
+		vals = append(vals, maths.ToInt(s))
+	}
+	return vals
 }
