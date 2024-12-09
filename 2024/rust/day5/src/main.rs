@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::{cmp::Ordering, collections::{HashMap, HashSet}};
 
 use utils::{log, logs, read_file_to_vec, run_and_score};
 
@@ -91,52 +91,24 @@ fn p2() -> i32 {
 
     for bad in bad_updates {
 
+
         let mut clone = bad.clone();
-        log!("--------------");
-        log!(&format!("Evaluating {:?}", clone));
 
+        clone.sort_by(|a: &i32, b : &i32| -> Ordering {
 
-        for i in (0 .. bad.len()).rev() {
-
-            while try_move(&mut clone, i, &ruleset) {
-                
-                log!(&format!("Swapped {:?}", clone));
+            if !ruleset.contains_key(b) {
+                return Ordering::Equal;
             }
-        }
+            let rules = ruleset.get(b).unwrap();
 
+            if rules.contains(a) {
+                return Ordering::Less
+            }
+            Ordering::Equal
+        });
         sum += clone[clone.len() / 2];
     }
     sum
-}
-
-/**
- * Try to swap the vector indices. This is assuming we are walking backwards from the end
- * given our ruleset.
- */
-fn try_move(v : &mut Vec<i32>, index : usize, ruleset : &HashMap<i32, HashSet<i32>>) -> bool {
-
-    let val = v[index];
-
-    //walking forward from index 0
-    // if val needs to come before v[i]
-    //  swap index and i then return true
-    let opt = ruleset.get(&val);
-    if opt.is_none() {
-        log!(&format!("{val} Is Not in Ruleset"));
-        return false;
-    }
-    let rule = opt.unwrap();
-
-    for i in 0 .. index {
-        
-        if rule.contains(&v[i]) {
-        
-            v.swap(i, index);
-            return true;
-        }
-    }
-    log!(&format!("{val} Does not need to be moved"));
-    false
 }
 
 fn main() {
