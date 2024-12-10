@@ -6,6 +6,7 @@ use (
 	./day3
 	./day4
 	./day5
+	./day9
 	./lib
 	./lib/avstrings
 	./lib/maths

@@ -297,7 +297,7 @@ func EvaluateMatch[T any](regex, source string, evaluate func([]string) T) T {
 
 func RemoveStrBetweenOrAfter(text string, before string, after string) string {
 
-	match_string := fmt.Sprintf("%s.*?%s|%s.*",before, after, before)
+	match_string := fmt.Sprintf("%s.*?%s|%s.*", before, after, before)
 	matcher := regexp.MustCompile(match_string)
 
 	return matcher.ReplaceAllString(text, "_X_")
@@ -312,4 +312,20 @@ func SplitStringToInts(str string, delimeter string) []int {
 		vals = append(vals, maths.ToInt(s))
 	}
 	return vals
+}
+
+const DEBUG = true
+
+func Log(a ...any) {
+	if !DEBUG {
+		return
+	}
+	fmt.Println(a...)
+}
+
+func Lognl(a ...any) {
+	if !DEBUG {
+		return
+	}
+	fmt.Print(a...)
 }
