@@ -39,3 +39,7 @@ func (stack *Stack[T]) Push(val T) {
 func (stack *Stack[T]) PushAll(vals []T) {
 	stack._backed = append(stack._backed, vals...)
 }
+
+func (stack *Stack[T]) IsEmpty() bool {
+	return len(stack._backed) == 0
+}

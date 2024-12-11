@@ -74,3 +74,31 @@ func ToInt(s string) int {
 	}
 	return res
 }
+
+
+type Position struct {
+	Row int
+	Col int
+}
+
+func (p Position) OutOfBounds(size int) bool {
+    return p.Row < 0 || p.Row >= size || p.Col < 0 || p.Col >= size
+}
+
+func (p Position) EvaluateFor(grid [][]int) int {
+	if p.OutOfBounds(len(grid)) {
+		panic("GRID OUT OF BOUNDS")
+	}
+	return grid[p.Row][p.Col]
+}
+
+func (p Position) Add(other Position) Position {
+	return Position {
+		p.Row + other.Row,
+		p.Col + other.Col,
+	}
+}
+
+func NewPosition(row int, col int) Position {
+	return Position{row, col}
+}

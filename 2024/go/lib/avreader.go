@@ -313,6 +313,23 @@ func SplitStringToInts(str string, delimeter string) []int {
 	}
 	return vals
 }
+func StringToInts(str string) []int {
+	var vals []int
+
+	for _, s := range str {
+		vals = append(vals, int(s - '0'))
+	}
+	return vals
+}
+
+func PrintTypeGrid[T any](grid [][]T) {
+	for _, row := range grid {
+		for _, col := range row {
+			fmt.Print(col, " ")
+		}
+		fmt.Println()
+	}
+}
 
 const DEBUG = true
 
