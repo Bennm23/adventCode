@@ -86,7 +86,7 @@ const MOVES : [Position; 4] = [
     Position(0, 1),
 ];
 
-fn dfs(grid: &Grid, position: Position, visited: &mut Visited, allPaths: bool) -> i32 {
+fn dfs(grid: &Grid, position: Position, visited: &mut Visited, all_paths: bool) -> i32 {
 
     let mut sum = 0;
 
@@ -103,14 +103,14 @@ fn dfs(grid: &Grid, position: Position, visited: &mut Visited, allPaths: bool) -
         if new_pos.out_of_bounds(grid.len() as i32) {
             continue;
         }
-        if !allPaths && visited.contains(&new_pos) {
+        if !all_paths && visited.contains(&new_pos) {
             continue;
         }
         if new_pos.evaluate_for(grid) - curr_height != 1 {
             continue;
         }
         visited.insert(new_pos);
-        sum += dfs(grid, new_pos, visited, allPaths);
+        sum += dfs(grid, new_pos, visited, all_paths);
     }
     sum
 }
