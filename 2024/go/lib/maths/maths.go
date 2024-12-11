@@ -3,6 +3,7 @@ package maths
 import (
 	"fmt"
 	"hash/fnv"
+	"math"
 	"strconv"
 )
 
@@ -74,6 +75,14 @@ func ToInt(s string) int {
 	}
 	return res
 }
+func ToInt64(s string) int64 {
+	res, err := strconv.ParseInt(s, 10, 64)
+
+	if err != nil {
+		panic(err)
+	}
+	return res
+}
 
 
 type Position struct {
@@ -102,3 +111,20 @@ func (p Position) Add(other Position) Position {
 func NewPosition(row int, col int) Position {
 	return Position{row, col}
 }
+
+func CountDigits(num int) int {
+	if num == 0 {
+		return 1
+	}
+
+	return int(math.Floor(math.Log10(math.Abs(float64(num))))) + 1
+}
+func numEvenDigits(num int) bool {
+    return CountDigits(num) % 2 == 0
+}
+func splitNum(num int) (int, int) {
+    tens := int(math.Pow10(CountDigits(num) / 2))
+
+    return num / tens, num % tens
+}
+
