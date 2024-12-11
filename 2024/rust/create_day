@@ -5,3 +5,18 @@ cargo init $1
 cd $1
 
 echo "utils = {path = \"../utils\"}" >> Cargo.toml
+
+echo """use utils::{run_and_score};
+
+fn main() {
+    run_and_score(\"Part 1\", || p1());
+    run_and_score(\"Part 2\", || p2());
+}
+
+fn p1() -> i32 {
+    0
+}
+fn p2() -> i32 {
+    0
+}""" > src/main.rs
+

@@ -38,6 +38,25 @@ pub fn read_file_to_grid(day_file : &str) -> Vec<Vec<char>> {
     lines
 }
 
+pub fn read_file_to_int_grid(day_file : &str) -> Vec<Vec<i32>> {
+    let file_path = get_advent_path(day_file);
+    let contents = fs::read_to_string(file_path)
+        .expect("Could Not Parse File");
+
+    let lines: Vec<Vec<i32>> = contents.split("\n")
+        .filter(|s | !s.is_empty())
+        .map(|s : &str| convert_string_to_ints(s))
+        .collect();
+    lines
+}
+
+pub fn convert_string_to_ints(string : &str) -> Vec<i32> {
+
+    return string.chars()
+        .map(|c: char| c.to_digit(10).expect("Failed to parse int") as i32)
+        .collect()
+}
+
 const DEBUG : bool = false;
 
 pub fn log(s : &str, newline : bool, always : bool) {
