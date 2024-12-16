@@ -102,27 +102,21 @@ func ToInt64(s string) int64 {
 	return res
 }
 
-
-type Position struct {
-	Row int
-	Col int
-}
-
 func (p Position) OutOfBounds(size int) bool {
-    return p.Row < 0 || p.Row >= size || p.Col < 0 || p.Col >= size
+	return p.X < 0 || p.X >= size || p.Y < 0 || p.Y >= size
 }
 
 func (p Position) EvaluateFor(grid [][]int) int {
 	if p.OutOfBounds(len(grid)) {
 		panic("GRID OUT OF BOUNDS")
 	}
-	return grid[p.Row][p.Col]
+	return grid[p.X][p.Y]
 }
 
 func (p Position) Add(other Position) Position {
-	return Position {
-		p.Row + other.Row,
-		p.Col + other.Col,
+	return Position{
+		p.X + other.X,
+		p.Y + other.Y,
 	}
 }
 
@@ -138,11 +132,10 @@ func CountDigits(num int) int {
 	return int(math.Floor(math.Log10(math.Abs(float64(num))))) + 1
 }
 func numEvenDigits(num int) bool {
-    return CountDigits(num) % 2 == 0
+	return CountDigits(num)%2 == 0
 }
 func splitNum(num int) (int, int) {
-    tens := int(math.Pow10(CountDigits(num) / 2))
+	tens := int(math.Pow10(CountDigits(num) / 2))
 
-    return num / tens, num % tens
+	return num / tens, num % tens
 }
-
