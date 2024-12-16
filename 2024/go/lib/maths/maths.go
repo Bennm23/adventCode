@@ -80,6 +80,35 @@ type Position struct {
 	X int
 	Y int
 }
+var ALL_MOVES = []Position{
+	{X: -1, Y: 0}, //N
+	{X: 0, Y: 1},  //E
+	{X: 1, Y: 0},  //S
+	{X: 0, Y: -1}, //W
+	{X: -1, Y: 1}, //NE
+	{X: 1, Y: 1},  //SE
+	{X: 1, Y: -1}, //SW
+	{X: -1, Y: -1},//NW
+}
+const (
+    N = iota
+    E
+    S
+    W
+    NE
+    SE
+    SW
+    NW
+)
+func GetNeighbors(position Position) []Position {
+	neighbors := make([]Position, 0)
+
+	for _, move := range ALL_MOVES {
+		neighbors = append(neighbors, move.Add(position))
+	}
+	return neighbors
+}
+
 
 func (p Position) InBounds(size int) bool {
 	return p.X < size && p.X >= 0 && p.Y < size && p.Y >= 0
