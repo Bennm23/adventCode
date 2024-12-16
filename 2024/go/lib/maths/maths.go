@@ -85,11 +85,11 @@ func (p Position) InBounds(size int) bool {
 	return p.X < size && p.X >= 0 && p.Y < size && p.Y >= 0
 }
 
-func (p *Position) Add(o Position) {
+func (p *Position) PAdd(o Position) {
 	p.X += o.X
 	p.Y += o.Y
 }
-func (p *Position) Minus(o Position) {
+func (p *Position) PMinus(o Position) {
 	p.X -= o.X
 	p.Y -= o.Y
 }
