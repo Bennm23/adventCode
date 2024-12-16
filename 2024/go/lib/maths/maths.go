@@ -168,3 +168,14 @@ func splitNum(num int) (int, int) {
 
 	return num / tens, num % tens
 }
+
+var HORIZONTAL_MOVES = []Position{
+	{X: -1, Y: 0},
+	{X: 0, Y: 1},
+	{X: 1, Y: 0},
+	{X: 0, Y: -1},
+}
+
+func (p Position) Distance(other Position) float64 {
+	return math.Sqrt((math.Pow(float64(other.X - p.X), 2) + math.Pow(float64(other.Y - p.Y), 2)))
+}

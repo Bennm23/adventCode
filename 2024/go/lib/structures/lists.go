@@ -1,5 +1,7 @@
 package structures
 
+import "advent/lib/maths"
+
 type List[T comparable] []T
 type ListTwoD[T comparable] [][]T
 
@@ -36,6 +38,12 @@ func (list ListTwoD[T]) ContainsRow(vals []T) bool {
 }
 
 type Set[T comparable] []T
+
+type ExplorationSet = Set[maths.Position]
+
+func (set Set[T]) IsEmpty() bool {
+	return len(set) == 0
+}
 
 func (set Set[T]) Contains(val T) bool {
 	for _, a := range set {
