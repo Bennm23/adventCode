@@ -8,7 +8,7 @@ import (
 )
 
 type Number interface {
-	int | int8 | int16 | int32 | int64 
+	int | int8 | int16 | int32 | int64
 }
 
 func Gcd[T Number](a, b T) T {
@@ -16,19 +16,19 @@ func Gcd[T Number](a, b T) T {
 		return a
 	}
 
-	return Gcd(b, a % b)
+	return Gcd(b, a%b)
 }
 
 func Lcm[T Number](a, b T) T {
 	return (a * b) / Gcd(a, b)
 }
 
-func LcmRange[T Number]( vals ... T) T {
+func LcmRange[T Number](vals ...T) T {
 	if len(vals) < 2 {
 		panic("LCM RANGE TO SMALL")
 	}
 	var res T = Lcm(vals[0], vals[1])
-	
+
 	if len(vals) == 2 {
 		return res
 	}
@@ -74,6 +74,24 @@ func ToInt(s string) int {
 		panic(err)
 	}
 	return res
+}
+
+type Position struct {
+	X int
+	Y int
+}
+
+func (p Position) InBounds(size int) bool {
+	return p.X < size && p.X >= 0 && p.Y < size && p.Y >= 0
+}
+
+func (p *Position) Add(o Position) {
+	p.X += o.X
+	p.Y += o.Y
+}
+func (p *Position) Minus(o Position) {
+	p.X -= o.X
+	p.Y -= o.Y
 }
 func ToInt64(s string) int64 {
 	res, err := strconv.ParseInt(s, 10, 64)

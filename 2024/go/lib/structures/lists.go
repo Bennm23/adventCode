@@ -143,3 +143,12 @@ func CountMatches[T comparable](list []T, val T) int {
 	}
 	return counter
 }
+func IndexOf[T comparable](list []T, val T) int {
+	for vix, v := range list {
+
+		if v == val {
+			return vix
+		}
+	}
+	return -1
+}
