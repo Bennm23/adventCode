@@ -217,12 +217,12 @@ func ReadFileWithReplace(name string, replacer Formatter) ([]string, error) {
 type Formatter func(string) string
 
 type Solver func()
-type Scorer func() int
+type Scorer[T any] func() T
 
-func RunAndScore(title string, solver Scorer) {
+func RunAndScore[T any](title string, solver Scorer[T]) {
 	start := time.Now().UnixMicro()
 	score := solver()
-	fmt.Printf("%s: Score = %d. Total Time %d us\n", title, score, (time.Now().UnixMicro() - start))
+	fmt.Printf("%s: Result = %v : Total Time %d us\n", title, score, (time.Now().UnixMicro() - start))
 }
 
 func RunAndPrintDuration(solver Solver) {
@@ -293,6 +293,13 @@ func EvaluateMatch[T any](regex, source string, evaluate func([]string) T) T {
 	result := matcher.FindAllString(source, -1)
 
 	return evaluate(result)
+}
+
+func ParseIntFromString(search string) int {
+	matcher := regexp.MustCompile(`(\d+)`)
+	result := matcher.FindString(search)
+
+	return maths.ToInt(result)
 }
 
 func RemoveStrBetweenOrAfter(text string, before string, after string) string {
