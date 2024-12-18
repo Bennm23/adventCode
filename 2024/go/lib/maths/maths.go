@@ -179,3 +179,28 @@ var HORIZONTAL_MOVES = []Position{
 func (p Position) Distance(other Position) float64 {
 	return math.Sqrt((math.Pow(float64(other.X - p.X), 2) + math.Pow(float64(other.Y - p.Y), 2)))
 }
+
+func InitTypeGrid[T any](val T, height, width int) [][]T {
+	grid := make([][]T, 0)
+
+	for range height {
+		row := make([]T, 0)
+		for range width {
+			row = append(row, val)
+		}
+		grid = append(grid, row)
+	}
+	return grid
+}
+
+type AnyNum interface {
+	int | float32 | float64
+}
+
+func Max[T AnyNum](a, b T) T {
+	if a >= b {
+		return a
+	}
+
+	return b
+}
