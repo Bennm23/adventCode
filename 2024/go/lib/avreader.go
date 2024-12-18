@@ -296,10 +296,20 @@ func EvaluateMatch[T any](regex, source string, evaluate func([]string) T) T {
 }
 
 func ParseIntFromString(search string) int {
-	matcher := regexp.MustCompile(`(\d+)`)
+	matcher := regexp.MustCompile(`(-?\d+)`)
 	result := matcher.FindString(search)
 
 	return maths.ToInt(result)
+}
+func ParseIntsFromString(search string) []int {
+	matcher := regexp.MustCompile(`(-?\d+)`)
+	result := matcher.FindAllString(search, -1)
+	ints := make([]int, 0)
+
+	for _, result := range result {
+		ints = append(ints, maths.ToInt(result))
+	}
+	return ints
 }
 
 func RemoveStrBetweenOrAfter(text string, before string, after string) string {
