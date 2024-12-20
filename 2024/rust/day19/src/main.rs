@@ -5,7 +5,7 @@ use utils::{log, read_file_to_vec, run_and_score_both};
 fn main() {
 //  Part 1: Result = 306.
 //  Part 2: Result = 604622004681855.
-//  Took 11705608 us
+//  Took 209471 us
     run_and_score_both(solve);
 }
 
@@ -23,16 +23,18 @@ fn build_input() -> (Vec<Vec<char>>, Vec<Vec<char>>) {
     (combinations, options)
 }
 
+type VisitedCombos = HashMap<Vec<char>, usize>;
+
 fn count_possibilities(
-    options : &Vec<Vec<char>>,
-    towel   : Vec<char>,
-    visited : &mut HashMap<Vec<char>, usize>
+    options     : &Vec<Vec<char>>,
+    combination : &[char],
+    visited     : &mut VisitedCombos
 ) -> usize {
 
-    if let Some(found) = visited.get(&towel) {
+    if let Some(found) = visited.get(combination) {
         return *found
     }
-    if towel.is_empty() {
+    if combination.is_empty() {
         return 1
     }
     //At each char in the towel
@@ -42,15 +44,15 @@ fn count_possibilities(
     //if towel == "" return 1
 
     let mut total = 0;
-    for c in 0 ..= towel.len() {
+    for c in 0..=combination.len() {
 
-        let curr = &towel[0..c];
+        let curr = &combination[0..c];
 
         if options.contains(&curr.to_vec()) {
-            total += count_possibilities(&options, towel[c..].to_vec(), visited);
+            total += count_possibilities(&options, &combination[c..], visited);
         }
     }
-    visited.insert(towel, total);
+    visited.insert(combination.to_vec(), total);
 
     total
 }
@@ -62,12 +64,12 @@ fn solve() -> (usize, usize) {
     log!("Combinations");
     let mut p1 = 0;
     let mut p2 = 0;
-    for combo in combinations {
-        log!(&format!("Combo = {:?}", combo));
+    for combination in combinations {
+        log!(&format!("Combination = {:?}", combination));
 
-        let mut visited : HashMap<Vec<char>, usize> = HashMap::new();
+        let mut visited : VisitedCombos = HashMap::new();
 
-        let res = count_possibilities(&options, combo, &mut visited);
+        let res = count_possibilities(&options, &combination, &mut visited);
     
         if res > 0 {
             p1 += 1;
