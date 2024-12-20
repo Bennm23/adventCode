@@ -156,6 +156,23 @@ pub fn run_and_score<R : Display, F :Fn() -> R>(title : &str, solver : F) {
 
     println!("{title}: Result = {}. Ran For = {} us", res, (end - start));
 }
+pub fn run_and_score_both<R : Display, F :Fn() -> (R, R)>(solver : F) {
+    let start = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
+        Ok(n) => n.as_micros(),
+        Err(_) => panic!("oops")
+    };
+    
+    let (p1, p2) = solver();
+
+    let end = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
+        Ok(n) => n.as_micros(),
+        Err(_) => panic!("oops")
+    };
+
+    println!("Part 1: Result = {}.", p1);
+    println!("Part 2: Result = {}.", p2);
+    println!("Took {} us", (end - start));
+}
 
 pub fn remove_between_or_after(text: &str, start: &str, end: &str) -> String {
     // Build the non-greedy regex pattern
