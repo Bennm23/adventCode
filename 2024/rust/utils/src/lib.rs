@@ -37,6 +37,27 @@ pub fn read_file_to_grid(day_file : &str) -> Vec<Vec<char>> {
         .collect();
     lines
 }
+pub fn read_file_to_groups(day_file : &str, seperator : &str) -> Vec<Vec<String>> {
+    let file_path = get_advent_path(day_file);
+    let contents = fs::read_to_string(file_path)
+        .expect("Could Not Parse File");
+
+    let mut lines : Vec<Vec<String>> = Vec::new();
+
+    let mut subgroup : Vec<String> = Vec::new();
+
+    for line in contents.split("\n") {
+
+        if line == seperator {
+            lines.push(subgroup.clone());
+            subgroup = Vec::new();
+        } else {
+            subgroup.push(line.to_owned());
+        }
+    }
+    lines.push(subgroup.clone());
+    lines
+}
 
 pub fn read_file_to_int_grid(day_file : &str) -> Vec<Vec<i32>> {
     let file_path = get_advent_path(day_file);
@@ -179,4 +200,31 @@ pub fn remove_between_or_after(text: &str, start: &str, end: &str) -> String {
     let pattern = format!(r"{}.*?{}|{}.*", regex::escape(start), regex::escape(end), regex::escape(start));
     let re = Regex::new(&pattern).unwrap();
     re.replace_all(text, "").to_string()
+}
+
+#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
+pub struct Pair(pub i32, pub i32);
+
+impl Pair {
+    fn evaluate_for<T: Copy>(&self, grid: &Vec<Vec<T>>) -> T {
+        grid[self.0 as usize][self.1 as usize]
+    }
+    pub fn out_of_bounds(&self, size : usize) -> bool {
+        self.0 < 0 || self.0 >= size as i32 || self.1 < 0 || self.1 >= size as i32
+    }
+
+    pub fn add(&self, other: &Pair) -> Self {
+
+        Self (
+            self.0 + other.0,
+            self.1 + other.1,
+        )
+    }
+
+    pub fn ia(&self) -> usize {
+        self.0 as usize
+    }
+    pub fn ib(&self) -> usize {
+        self.1 as usize
+    }
 }
