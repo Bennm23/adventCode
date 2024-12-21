@@ -209,6 +209,8 @@ impl Pair {
     fn evaluate_for<T: Copy>(&self, grid: &Vec<Vec<T>>) -> T {
         grid[self.0 as usize][self.1 as usize]
     }
+
+    #[inline(always)]
     pub fn out_of_bounds(&self, size : usize) -> bool {
         self.0 < 0 || self.0 >= size as i32 || self.1 < 0 || self.1 >= size as i32
     }
@@ -221,10 +223,22 @@ impl Pair {
         )
     }
 
+    #[inline(always)]
     pub fn ia(&self) -> usize {
         self.0 as usize
     }
+    #[inline(always)]
     pub fn ib(&self) -> usize {
         self.1 as usize
+    }
+}
+
+pub fn print_over_tgrid<T: Copy>(grid : &Vec<Vec<T>>, printer:  &dyn Fn(usize, usize, T)) {
+
+    for (rix, row) in grid.iter().enumerate() {
+        for (cix, col) in row.iter().enumerate() {
+            printer(rix, cix, *col);
+        }
+        println!()
     }
 }
