@@ -64,6 +64,13 @@ func (set Set[T]) ContainsAll(vals ...T) bool {
 	}
 	return true
 }
+func (set Set[T]) Items() []T {
+	items := make([]T, 0)
+	for k := range set {
+		items = append(items, k)
+	}
+	return items
+}
 func (set *Set[T]) Insert(val T) {
 	(*set)[val] = struct{}{}
 }
