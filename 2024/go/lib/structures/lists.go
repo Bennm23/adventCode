@@ -1,6 +1,8 @@
 package structures
 
-import "advent/lib/maths"
+import (
+	"advent/lib/maths"
+)
 
 type List[T comparable] []T
 type ListTwoD[T comparable] [][]T
@@ -37,7 +39,7 @@ func (list ListTwoD[T]) ContainsRow(vals []T) bool {
 	return false
 }
 
-type Set[T comparable] []T
+type Set[T comparable] map[T]struct{}
 
 type ExplorationSet = Set[maths.Position]
 
@@ -45,13 +47,13 @@ func (set Set[T]) IsEmpty() bool {
 	return len(set) == 0
 }
 
-func (set Set[T]) Contains(val T) bool {
-	for _, a := range set {
-		if a == val {
-			return true
-		}
-	}
-	return false
+func NewSet[T comparable]() Set[T] {
+	return make(Set[T])
+}
+
+func (set Set[T]) Contains(key T) bool {
+	_, found := set[key]
+	return found
 }
 
 func (set Set[T]) ContainsAll(vals ...T) bool {
@@ -62,20 +64,8 @@ func (set Set[T]) ContainsAll(vals ...T) bool {
 	}
 	return true
 }
-
-func (set *Set[T]) AddAll(vals ...T) {
-
-	for _, v := range vals {
-		set.Add(v)
-	}
-
-}
-func (set *Set[T]) Add(val T) {
-
-	if !set.Contains(val) {
-		*set = append(*set, val)
-	}
-
+func (set *Set[T]) Insert(val T) {
+	(*set)[val] = struct{}{}
 }
 
 func (set *Set[T]) Remove(search T) {
@@ -83,27 +73,16 @@ func (set *Set[T]) Remove(search T) {
 	if !set.Contains(search) {
 		return
 	}
-
-	i := -1
-
-	for ix, val := range *set {
-
-		if search == val {
-			i = ix
-			break
-		}
-	}
-
-	*set = append((*set)[:i], (*set)[i+1:]...)
+	delete(*set, search)
 }
 
 
 func (set *Set[T]) Intersect(other Set[T]) Set[T] {
 	intersect := Set[T]{}
 
-	for _, val := range other {
-		if set.Contains(val) {
-			intersect.Add(val)
+	for key, _ := range other {
+		if set.Contains(key) {
+			intersect.Insert(key)
 		}
 	}
 
@@ -113,11 +92,11 @@ func (set *Set[T]) Intersect(other Set[T]) Set[T] {
 func (set *Set[T]) Union(other Set[T]) Set[T] {
 	union := Set[T]{}
 
-	for _, val := range *set {
-		union.Add(val)
+	for key, _ := range *set {
+		union.Insert(key)
 	}
-	for _, val := range other {
-		union.Add(val)
+	for key, _ := range other {
+		union.Insert(key)
 	}
 
 	return union
