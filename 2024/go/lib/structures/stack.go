@@ -1,11 +1,13 @@
 package structures
 
-type Stack[T any] struct {
+import "slices"
+
+type Stack[T comparable] struct {
 
 	_backed []T;
 }
 
-func NewStack[T any]() *Stack[T] {
+func NewStack[T comparable]() *Stack[T] {
 
 	return &Stack[T]{
 		_backed: make([]T, 0),
@@ -35,6 +37,21 @@ func (stack *Stack[T]) Size() int {
 func (stack *Stack[T]) Push(val T) {
 	stack._backed = append(stack._backed, val)
 }
+func (stack *Stack[T]) PushEval(val T, lt func(a, b T) bool) {
+	insert := -1
+	for i, v := range stack._backed {
+
+		if lt(val, v) {
+			insert = i
+			break;
+		}
+	}
+	if insert == -1 {
+		stack._backed = append(stack._backed, val)
+	} else {
+		stack._backed = append(stack._backed[:insert], append([]T{val}, stack._backed[insert:]...)...)
+	}
+}
 
 func (stack *Stack[T]) PushAll(vals []T) {
 	stack._backed = append(stack._backed, vals...)
@@ -42,4 +59,8 @@ func (stack *Stack[T]) PushAll(vals []T) {
 
 func (stack *Stack[T]) IsEmpty() bool {
 	return len(stack._backed) == 0
+}
+
+func (stack *Stack[T]) SortFunc(sorter func(a, b T) int) {
+	slices.SortFunc(stack._backed, sorter)
 }

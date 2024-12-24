@@ -204,3 +204,25 @@ func Max[T AnyNum](a, b T) T {
 
 	return b
 }
+
+func (p *Position) Times(scalar int) {
+	p.X *= scalar
+	p.Y *= scalar
+}
+
+func (p Position) TurnClockwise() Position {
+	if p.X == -1 {
+		return NewPosition(0, 1)
+	} else if p.X == 1 {
+		return NewPosition(0, -1)
+	} else if p.Y == -1 {
+		return NewPosition(-1, 0)
+	} else {
+		return NewPosition(1, 0)
+	}
+}
+func (p Position) TurnCounterClockwise() Position {
+	counterClockwise := p.TurnClockwise()
+	counterClockwise.Times(-1)
+	return counterClockwise
+}

@@ -3,8 +3,7 @@ package main
 import (
 	"advent/lib"
 	"advent/lib/maths"
-	"fmt"
-	"math"
+	"advent/lib/structures"
 )
 
 func main() {
@@ -12,103 +11,145 @@ func main() {
     lib.RunAndScore("Part 2", p2)
 }
 
-type Location struct {
+type Node struct {
+    position maths.Position
+    direction maths.Position
+    prev *Node
+    cost int
+}
+type NodeKey struct {
     position maths.Position
     direction maths.Position
 }
 
-func (loc Location) turnClockwise() Location {
-    location := Location{}
-    location.position = loc.position
-    if loc.direction.X == -1 {
-        location.direction = maths.NewPosition(0, 1)
-    } else if loc.direction.Y == 1 {
-        location.direction = maths.NewPosition(1, 0)
-    } else if loc.direction.X == 1 {
-        location.direction = maths.NewPosition(0, -1)
-    } else if loc.direction.Y == -1 {
-        location.direction = maths.NewPosition(-1, 0)
-    }
-    return location
-}
+func buildInput() ([][]rune, maths.Position, maths.Position) {
+    grid := lib.ReadFileToGrid("day16.txt")
 
-func p1() int {
-    sum := 0
-
-    grid := lib.ReadFileToGrid("day16_sample.txt")
-
-    var startPos, goal Location
+    var startPos, goal maths.Position
 
     for rix, row := range grid {
         for cix, col := range row {
-            fmt.Print(string(col))
-        
             if col == 'S' {
-                startPos = Location{maths.Position{rix, cix}, maths.Position{0, 1}}
+                startPos = maths.Position{X: rix, Y: cix}
             } else if col == 'E' {
-                goal = Location{maths.Position{rix, cix}, maths.Position{0, 0}}
+                goal = maths.Position{X: rix, Y: cix}
             }
         }
-        fmt.Println()
     }
-
-    fmt.Println("Start Pos = ", startPos)
-    fmt.Println("Goal = ", goal)
-
-    // explorationSet := structures.NewStack[Location]()
-    // explorationSet.Push(startPos)
-
-
-    currPos := startPos
-
-    for currPos != goal {
-    // for !explorationSet.IsEmpty() {
-
-        // currPos := explorationSet.Pop()
-
-        fmt.Println("At Pos = ", currPos)
-        options := make([]Location, 0)
-
-        for _, move := range maths.HORIZONTAL_MOVES {
-
-            //Turn
-            if move != currPos.direction {
-                newLoc := Location{currPos.position, move}
-                options = append(options, newLoc)
-            }
-
-            newPos := move.Add(currPos.position)
-            if !newPos.InBounds(len(grid)) {
-                continue
-            }
-            newLoc := Location{currPos.position, currPos.direction}
-            options = append(options, newLoc)
-        }
-
-        // options = append(options, currPos.turnClockwise())
-
-        minCost := math.MaxFloat64
-        var bestLoc Location
-        for _, option := range options {
-            cost := 1 + option.position.Distance(goal.position)
-            if option.position == currPos.position {
-                cost = 1000 + option.position.Distance(goal.position)
-                sum += 1000
-            } else {
-                sum += 1
-            }
-            if cost < minCost {
-                bestLoc = option
-            }
-        }
-        currPos = bestLoc
-        // explorationSet.Push(bestLoc)
-    }
-
-    return sum
+    return grid, startPos, goal
 }
-func p2() int {
-    sum := 0
 
-    return sum
+func p1() int {
+    grid, startPos, goal := buildInput()
+
+    visited := structures.NewSet[NodeKey]()
+
+
+    explorationSet := structures.NewStack[Node]()
+    explorationSet.Push(Node{startPos, maths.NewPosition(0, 1), nil, 0})
+
+    bestCost := -1
+    for !explorationSet.IsEmpty() {
+        curr := explorationSet.Pop()
+
+        if curr.position == goal {
+            bestCost = curr.cost
+            break
+        }
+
+        visited.Insert(NodeKey{curr.position, curr.direction})
+
+        linearPos := curr.position.Add(curr.direction)
+        //If linear in bounds and not blocked
+        if linearPos.InBounds(len(grid)) && grid[linearPos.X][linearPos.Y] != '#' {
+            newNode := Node{linearPos, curr.direction, &curr, curr.cost + 1}
+            if !visited.Contains(NodeKey{newNode.position, newNode.direction}) {
+                explorationSet.PushEval(newNode, func(a, b Node) bool {
+                    return a.cost < b.cost
+                })
+            }
+        }
+
+        //Try Clockwise turn
+        clockwiseDir := curr.direction.TurnClockwise();
+        clockwiseNode := Node{curr.position, clockwiseDir, &curr, curr.cost + 1000}
+        if !visited.Contains(NodeKey{clockwiseNode.position, clockwiseNode.direction}) {
+            explorationSet.PushEval(clockwiseNode, func(a, b Node) bool {
+                return a.cost < b.cost
+            })
+        }
+
+        counterClockwiseDir := curr.direction.TurnCounterClockwise();
+        counterClockwiseNode := Node{curr.position, counterClockwiseDir, &curr, curr.cost + 1000}
+        if !visited.Contains(NodeKey{counterClockwiseNode.position, counterClockwiseNode.direction}) {
+            explorationSet.PushEval(counterClockwiseNode, func(a, b Node) bool {
+                return a.cost < b.cost
+            })
+        }
+    }
+    return bestCost
+}
+
+type ExplorationSet = structures.Set[Node]
+
+
+func p2() int {
+    grid, startPos, goal := buildInput()
+
+    visited := structures.NewSet[NodeKey]()
+
+    explorationSet := structures.NewStack[Node]()
+    explorationSet.Push(Node{startPos, maths.NewPosition(0, 1), nil, 0})
+
+    goodPositions := structures.NewSet[maths.Position]()
+
+    for !explorationSet.IsEmpty() {
+        curr := explorationSet.Pop()
+
+        if curr.position == goal {
+            pos := &curr;
+
+            for {
+                goodPositions.Insert(pos.position)
+                pos = pos.prev
+                if pos == nil {
+                    break
+                }
+            }
+            continue
+        }
+
+        visited.Insert(NodeKey{curr.position, curr.direction})
+
+        linearPos := curr.position.Add(curr.direction)
+
+        //If linear in bounds and not blocked
+        if linearPos.InBounds(len(grid)) && grid[linearPos.X][linearPos.Y] != '#' {
+            newNode := Node{linearPos, curr.direction, &curr, curr.cost + 1}
+            if !visited.Contains(NodeKey{newNode.position, newNode.direction}) {
+                explorationSet.PushEval(newNode, func(a, b Node) bool {
+                    return a.cost < b.cost
+                })
+            }
+        }
+
+        //Try Clockwise turn
+        clockwiseDir := curr.direction.TurnClockwise();
+        clockwiseNode := Node{curr.position, clockwiseDir, &curr, curr.cost + 1000}
+        if !visited.Contains(NodeKey{clockwiseNode.position, clockwiseNode.direction}) {
+            explorationSet.PushEval(clockwiseNode, func(a, b Node) bool {
+                return a.cost < b.cost
+            })
+        }
+
+        counterClockwiseDir := curr.direction.TurnCounterClockwise();
+        counterClockwiseNode := Node{curr.position, counterClockwiseDir, &curr, curr.cost + 1000}
+        if !visited.Contains(NodeKey{counterClockwiseNode.position, counterClockwiseNode.direction}) {
+            explorationSet.PushEval(counterClockwiseNode, func(a, b Node) bool {
+                return a.cost < b.cost
+            })
+        }
+    }
+
+    return len(goodPositions)
 }
