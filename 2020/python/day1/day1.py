@@ -1,8 +1,6 @@
-from utils.reader import read_to_list
+from utils.reader import read_to_int_list
 
-lines = read_to_list("day1/input")
-
-nums = [int(l) for l in lines]
+nums = read_to_int_list("day1/input")
 
 def part1(nums: list[int]) -> int:
 
@@ -27,6 +25,7 @@ def part2(nums: list[int]) -> int:
 
 p1 = part1(nums)
 
+#Part 1 =  1019571
 print("Part 1 = ", p1)
-
+#Part 2 =  100655544
 print("Part 2 = ", part2(nums))
