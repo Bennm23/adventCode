@@ -1,0 +1,13 @@
+#!/bin/bash
+
+
+day="day$1"
+file="${day}.py"
+
+echo "Day {day}, file $file"
+
+mkdir -p $day
+
+touch $day/$file
+touch $day/input
+touch $day/sample

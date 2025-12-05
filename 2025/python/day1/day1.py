@@ -1,6 +1,4 @@
 
-
-
 def read_to_input():
     sample = []
     with open("input") as f:
