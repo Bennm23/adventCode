@@ -29,22 +29,6 @@ def p1() -> int:
 
     return max_area
 
-EMPTY = False
-RED = True
-GREEN = True
-
-# def print_grid(grid: list[list[int]]) -> None:
-#     for row in grid:
-#         for col in row:
-#             if col == EMPTY:
-#                 print(".", end='')
-#             elif col == RED:
-#                 print("#", end='')
-#             elif col == GREEN:
-#                 print("X", end='')
-                
-#         print()
-
 def get_corner_positions_in_rect(corner1: tuple[int,int], corner2: tuple[int,int]) -> list[tuple[int,int]]:
     positions = []
     min_row = min(corner1[ROW], corner2[ROW])
@@ -57,6 +41,7 @@ def get_corner_positions_in_rect(corner1: tuple[int,int], corner2: tuple[int,int
     positions.append((max_col, max_row))
     positions.append((max_col, min_row))
     return positions
+
 def get_border_positions_in_rect(corner1: tuple[int,int], corner2: tuple[int,int]) -> list[tuple[int,int]]:
     positions = []
     min_row = min(corner1[ROW], corner2[ROW])
@@ -71,20 +56,6 @@ def get_border_positions_in_rect(corner1: tuple[int,int], corner2: tuple[int,int
     for c in range(min_col + 1, max_col):
         positions.append((c, min_row))
         positions.append((c, max_row))
-    
-    return positions
-
-
-def get_all_positions_in_rect(corner1: tuple[int,int], corner2: tuple[int,int]) -> list[tuple[int,int]]:
-    positions = []
-    min_row = min(corner1[ROW], corner2[ROW])
-    max_row = max(corner1[ROW], corner2[ROW])
-    min_col = min(corner1[COL], corner2[COL])
-    max_col = max(corner1[COL], corner2[COL])
-
-    for r in range(min_row, max_row + 1):
-        for c in range(min_col, max_col + 1):
-            positions.append((c,r))
     
     return positions
 
@@ -128,8 +99,6 @@ def p2() -> int:
             else:
                 curr_start = filtered[i][0]
         
-        if curr_start != None:
-            new_ranges.add((curr_start, curr_start))
         valid_cols_in_row[r] = new_ranges
 
 
@@ -169,9 +138,11 @@ def p2() -> int:
             max_col = max(pairs[i][COL], pairs[j][COL])
 
             for r in range(min_row, max_row + 1):
+                # Left Edge
                 if not point_in_bounds(r, min_col):
                     all_green = False
                     break
+                # Right Edge
                 if not point_in_bounds(r, max_col):
                     all_green = False
                     break
@@ -179,9 +150,11 @@ def p2() -> int:
                 continue
             
             for c in range(min_col + 1, max_col):
+                # Top Edge
                 if not point_in_bounds(min_row, c):
                     all_green = False
                     break
+                # Bottom Edge
                 if not point_in_bounds(max_row, c):
                     all_green = False
                     break
